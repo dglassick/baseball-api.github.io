@@ -1,6 +1,6 @@
 $(function () {
 
-    $('.active_player').on('click',function (e) {
+    $('.active_player').on('submit',function (e) {
         e.preventDefault();
         let player_name = $('#player_name').val().trim();
         let yes_no = $('#yes_no').val();
@@ -16,8 +16,42 @@ $(function () {
             }
         }
 
-        $.ajax(settings).done(function (response) {
-            console.log(response);
+        $.ajax(settings).then((response) => {
+            console.log(response)
+            generateCard(response.search_player_all.queryResults.row)
         });
     })
+    const generateCard = (results) => {
+            console.log(results)
+        
+            
+            let cardContainer = $('#cardContainer');
+            let newCard = $('<div>');
+            newCard.addClass('card');
+            let cardBody = $('<div>');
+            cardBody.addClass('card-body');
+            newCard.append(cardBody);
+            let cardTitle = $('<h5>');
+            cardTitle.addClass("card-title");
+            cardTitle.text(`${results.name_display_first_last}`);
+            cardBody.append(cardTitle);
+            let cardTeam = $('<h6>');
+            cardTeam.addClass('card-subtitle');
+            cardTeam.text(`${results.team_full}`);
+            cardBody.append(cardTeam);
+            let cardBirthDate = $("<p class='card-text'>");
+            // cardPosition.addClass('card-text');
+            cardBirthDate.text(`DOB: ${results.birth_date}`);
+            cardBody.append(cardBirthDate);
+            let cardBirthLocation = $("<p class='card-text'>");
+            // cardPosition.addClass('card-text');
+            cardBirthLocation.text(`Place of Birth: ${results.birth_city}, ${results.birth_state}, ${results.birth_country}`);
+            cardBody.append(cardBirthLocation);
+            let cardPosition = $("<p class='card-text'>");
+            // cardPosition.addClass('card-text');
+            cardPosition.text(`Position: ${results.position}`);
+            cardBody.append(cardPosition);
+            cardContainer.append(newCard);
+        
+    }
 })
